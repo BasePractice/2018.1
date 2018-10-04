@@ -17,10 +17,10 @@ enum Key {
 };
 
 enum Event {
-    KEY_DOWN,
-    KEY_UP,
-    WINDOW,
-    NONE
+    KeyDownEvent,
+    KeyUpEvent,
+    WindowEvent,
+    NoneEvent
 };
 
 struct Console;

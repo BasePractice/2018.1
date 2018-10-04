@@ -1,5 +1,8 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include <curses.h>
 #include <unistd.h>
+#include <assert.h>
 #include "console_gui.h"
 
 struct Console {
@@ -7,6 +10,7 @@ struct Console {
     int height;
     int x;
     int y;
+    int ch;
 };
 
 
@@ -16,6 +20,7 @@ bool console_init(struct Console **c) {
     }
     (*c) = calloc(1, sizeof(struct Console));
     initscr();
+    start_color();
     noecho();
     curs_set(FALSE);
 
@@ -24,6 +29,8 @@ bool console_init(struct Console **c) {
 
     (*c)->x = 0;
     (*c)->y = 0;
+
+    (*c)->ch = -1;
     nodelay(stdscr, TRUE);
     keypad(stdscr, TRUE);
     return true;
@@ -114,8 +121,6 @@ void console_text_position(struct Console *c, int x, int y, const char *const te
 }
 
 void console_text(struct Console *c, const char *const text) {
-    DWORD written;
-
     assert(c != 0);
     mvprintw(c->x, c->y, text);
 }
@@ -127,40 +132,19 @@ void console_move(struct Console *c, int x, int y) {
     c->y = y;
 }
 
-struct Event console_event(struct Console *c) {
-    INPUT_RECORD record;
-    DWORD read = 0;
-
+enum Event console_event(struct Console *c) {
     assert(c != 0);
-    if (ReadConsoleInput(c->h_input, &record, 1, &read)) {
-        if (read == 1) {
-            switch (record.EventType) {
-                case KEY_EVENT: {
-                    if (record.Event.KeyEvent.bKeyDown) {
-                        if (record.Event.KeyEvent.uChar.UnicodeChar == 0) {
-                            c->ch = record.Event.KeyEvent.wVirtualKeyCode;
-                        } else {
-                            c->ch = record.Event.KeyEvent.uChar.UnicodeChar;
-                        }
-                        return KEY_DOWN;
-                    } else {
-                        return KEY_UP;
-                    }
-                }
-                case WINDOW_BUFFER_SIZE_EVENT: {
-                    c->width = record.Event.WindowBufferSizeEvent.dwSize.X;
-                    c->height = record.Event.WindowBufferSizeEvent.dwSize.Y;
-                    return WINDOW;
-                }
-                default:
-                    break;
-            }
-        }
+
+    c->ch = getch();
+    if (c->ch >= KEY_DOWN && c->ch <= KEY_RIGHT ) {
+        return KeyDownEvent;
+    } else if (c->ch >= 0x20 && c->ch < 0xff) {
+        return KeyDownEvent;
     }
-    return NONE;
+    return NoneEvent;
 }
 
 int console_ch(struct Console *c) {
     assert(c != 0);
-    return wgetch(stdscr);
+    return c->ch;
 }

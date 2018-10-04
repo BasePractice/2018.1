@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
     console_text(c, "o");
     while (is_running) {
         switch (console_event(c)) {
-            case KEY_DOWN: {
+            case KeyDownEvent: {
                 int ch = console_ch(c);
                 switch (console_translate_key(ch)) {
                     case KeyDown:
@@ -34,22 +34,23 @@ int main(int argc, char **argv) {
                         console_left(c);
                         need_refresh = true;
                         break;
-                    default:
+                    default: {
                         is_running = ch != 'q' && ch != 'Q';
                         need_refresh = false;
                         //tick
                         console_sleep(100);
                         break;
+                    }
                 }
                 break;
             }
-            case WINDOW: {
+            case WindowEvent: {
                 need_refresh = true;
                 break;
             }
-            case NONE:
+            case NoneEvent:
                 break;
-            case KEY_UP:
+            case KeyUpEvent:
                 break;
         }
         if (need_refresh) {

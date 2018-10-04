@@ -163,22 +163,22 @@ enum Event console_event(struct Console *c) {
                         } else {
                             c->ch = record.Event.KeyEvent.uChar.UnicodeChar;
                         }
-                        return KEY_DOWN;
+                        return KeyDownEvent;
                     } else {
-                        return KEY_UP;
+                        return KeyUpEvent;
                     }
                 }
                 case WINDOW_BUFFER_SIZE_EVENT: {
                     c->width = record.Event.WindowBufferSizeEvent.dwSize.X;
                     c->height = record.Event.WindowBufferSizeEvent.dwSize.Y;
-                    return WINDOW;
+                    return WindowEvent;
                 }
                 default:
                     break;
             }
         }
     }
-    return NONE;
+    return NoneEvent;
 }
 
 int console_ch(struct Console *c) {
