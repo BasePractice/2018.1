@@ -222,7 +222,6 @@ struct Server {
     pthread_mutex_t running_mut;
     pthread_cond_t running_cond;
 #endif
-    struct SessionManager *manager;
 
     void (*client_handler)(int, SOCKET, void *);
 };
@@ -255,8 +254,6 @@ client_default_handler(int id, SOCKET socket_client, void *user_data) {
 
 struct Server *
 server_create(const char *port,
-              const char *cv_configuration_file,
-              const char *ci_configuration_file,
               void (*client_handler)(int, SOCKET, void *)) {
     struct Server *server = calloc(1, sizeof(struct Server));
     server->running = TRUE;
@@ -377,7 +374,7 @@ start_server_unix(void *parameter) {
                             ((char *) &sock_addr_in.sin_addr.s_addr)[3]
                     );
                     fcntl(client_socket, F_SETFL, fcntl(client_socket, F_GETFL, 0) & (~O_NONBLOCK));
-                    (*server->client_handler)(++server->id, client_socket, server->manager);
+                    (*server->client_handler)(++server->id, client_socket, 0);
                 }
             } else {
                 fprintf(stderr, "[server] select failed: %d\n", network_last_error());
@@ -590,10 +587,10 @@ void client_wait_symbols(SOCKET s, size_t symbols) {
 
     while (it < symbols) {
         ret = (int) recv(s, recv_buf + it, symbols, 0);
+        fprintf(stdout, "%.*s", ret, recv_buf + it);
         it += ret;
     }
-    recv_buf[it] = 0;
-    fprintf(stdout, "%d: %s", it, recv_buf);
+    fflush(stdout);
     free(recv_buf);
 }
 

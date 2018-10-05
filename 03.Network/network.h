@@ -33,8 +33,6 @@ void dump_content(const char *identity, uint8_t *content, uint64_t content_len);
 
 
 struct Server *server_create(const char *port,
-                             const char *cv_configuration_file,
-                             const char *ci_configuration_file,
                              void (*client_handler)(int, SOCKET, void *));
 int server_start(struct Server *server);
 int server_wait(struct Server *server, uint32_t milliseconds);
