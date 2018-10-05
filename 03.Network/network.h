@@ -17,6 +17,7 @@ void network_init();
 void network_destroy();
 int  network_last_error();
 
+typedef void (*RESPONSE_HANDLE)(SOCKET, void *);
 
 void socket_close(SOCKET sock);
 

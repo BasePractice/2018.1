@@ -324,7 +324,7 @@ start_server_windows_thread(LPVOID parameter) {
 #endif
                     non_block = 0;
                     ioctlsocket(client_socket, FIONBIO, (u_long *) &non_block);
-                    (*server->client_handler)(++server->id, client_socket, server->manager);
+                    (*server->client_handler)(++server->id, client_socket, 0);
                 }
             } else {
                 fprintf(stderr, "[server] select failed: %d\n", network_last_error());
