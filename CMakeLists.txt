@@ -33,9 +33,11 @@ endif ()
 
 include_directories(00.Base)
 include_directories(01.ConsoleGui)
+include_directories(03.Network)
 
 add_subdirectory(01.ConsoleGui)
 add_subdirectory(02.Examples)
+add_subdirectory(03.Network)
 
 
 add_library(tests_main STATIC 00.Base/catch2/catch.hpp 00.Base/tests_main.cpp)
