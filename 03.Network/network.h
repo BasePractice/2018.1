@@ -26,10 +26,10 @@ int  client_disconnect(struct Client *client);
 void client_destroy(struct Client *client);
 size_t client_request(struct Client *client,
                       const uint8_t *buffer, size_t size,
-                      void (*response_handler)(SOCKET, struct ServerResponse *), void *user_data);
+                      void (*response_handler)(SOCKET, void *), void *user_data);
 void client_wait_symbols(SOCKET s, size_t symbols);
 void client_dump(struct Client *client);
-void dump_content(const char *identity, uint8_t *content, uint64_t content_len);
+void dump_content(const char *identity, uint8_t *content, size_t content_len);
 
 
 struct Server *server_create(const char *port,

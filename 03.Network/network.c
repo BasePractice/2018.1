@@ -517,9 +517,9 @@ int
 client_disconnect(struct Client *client) {
     shutdown(client->socket_server,
 #if defined(WIN32)
-             SD_SEND
+            SD_SEND
 #else
-            SHUT_RDWR
+             SHUT_RDWR
 #endif
     );
     socket_close(client->socket_server);
@@ -530,7 +530,7 @@ client_disconnect(struct Client *client) {
 size_t
 client_request(struct Client *client,
                const uint8_t *buffer, size_t size,
-               void (*response_handler)(SOCKET, struct ServerResponse *), void *user_data) {
+               void (*response_handler)(SOCKET, void *), void *user_data) {
     if (client != NULL && buffer != NULL) {
         int start = milliseconds_now();
         int ret = (int) send(client->socket_server, (const char *) buffer, (int) size, 0);
@@ -564,9 +564,9 @@ client_dump(struct Client *client) {
 }
 
 void
-dump_content(const char *identity, uint8_t *content, uint64_t content_len) {
+dump_content(const char *identity, uint8_t *content, size_t content_len) {
     uint64_t i;
-    fprintf(stdout, "[%s] Content(%llu):", identity, content_len);
+    fprintf(stdout, "[%s] Content(%lu):", identity, content_len);
     for (i = 0; i < content_len && i < 256; ++i) {
         if (i % 60 == 0) {
             fprintf(stdout, "\n");
