@@ -594,3 +594,21 @@ void client_wait_symbols(SOCKET s, size_t symbols) {
     free(recv_buf);
 }
 
+#define BUFFER_SIZE 1024
+
+void client_handler(int i, SOCKET s, void *user_data) {
+    int ret;
+    int it = 0;
+    char buf[BUFFER_SIZE];
+
+    while (true) {
+        if (it < BUFFER_SIZE) {
+            it = 0;
+        }
+        ret = (int) recv(s, buf + it, BUFFER_SIZE / 2, 0);
+        fprintf(stdout, "%.*s", ret, buf + it);
+        it += ret;
+    }
+    fflush(stdout);
+}
+

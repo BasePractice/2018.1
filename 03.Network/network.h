@@ -39,6 +39,7 @@ int server_start(struct Server *server);
 int server_wait(struct Server *server, uint32_t milliseconds);
 int server_stop(struct Server *server);
 void server_destroy(struct Server *);
+void client_handler(int i, SOCKET s, void *user_data);
 
 #if defined(__cplusplus)
 }
