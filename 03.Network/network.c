@@ -69,7 +69,7 @@ network_init() {
 #endif
 }
 
-SOCKET socket_listen_server(const char *port);
+SOCKET socket_listen_server(const char *);
 
 void
 socket_close(SOCKET sock) {
