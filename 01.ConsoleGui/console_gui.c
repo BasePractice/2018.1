@@ -5,6 +5,8 @@
 
 #include <windows.h>
 #else
+
+#include <unistd.h>
 #endif
 
 int console_sleep(int milliseconds) {

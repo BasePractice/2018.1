@@ -10,7 +10,11 @@ int main(int argc, char **argv) {
     struct Client *c;
     network_init();
     c = client_create(argv[1], argv[2]);
-    client_connect(c);
+    if ( client_connect(c) == 0 ) {
+        client_destroy(c);
+        network_destroy();
+        return EXIT_FAILURE;
+    }
     client_request(c, (uint8_t *) argv[3], strlen(argv[3]),
                    (RESPONSE_HANDLE) client_wait_symbols,
                    (void *) 8);

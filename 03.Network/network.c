@@ -375,6 +375,7 @@ start_server_unix(void *parameter) {
                     );
                     fcntl(client_socket, F_SETFL, fcntl(client_socket, F_GETFL, 0) & (~O_NONBLOCK));
                     (*server->client_handler)(++server->id, client_socket, 0);
+                    fprintf(stdout, "[server] complete\n");
                 }
             } else {
                 fprintf(stderr, "[server] select failed: %d\n", network_last_error());
@@ -606,9 +607,13 @@ void client_handler(int i, SOCKET s, void *user_data) {
             it = 0;
         }
         ret = (int) recv(s, buf + it, BUFFER_SIZE / 2, 0);
+        if (ret <= 0)
+            break;
         fprintf(stdout, "%.*s", ret, buf + it);
+        fflush(stdout);
         it += ret;
     }
+    fprintf(stdout, "\n");
     fflush(stdout);
 }
 

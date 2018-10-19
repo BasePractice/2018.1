@@ -9,10 +9,12 @@ set(SOURCE_TEST_FILES network_tests.cpp)
 
 if (WIN32)
     set(SYSTEM_LIBRARIES ws2_32)
+else ()
+    set(SYSTEM_LIBRARIES pthread)
 endif ()
 
 add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 add_executable(${PROJECT_NAME}_Tests ${SOURCE_FILES} ${SOURCE_TEST_FILES})
 target_link_libraries(${PROJECT_NAME} ${SYSTEM_LIBRARIES})
-target_link_libraries(${PROJECT_NAME}_Tests  tests_main ${SYSTEM_LIBRARIES})
+target_link_libraries(${PROJECT_NAME}_Tests tests_main ${SYSTEM_LIBRARIES})
 
